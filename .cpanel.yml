@@ -1,0 +1,19 @@
+# cPanel Git Version Control auto-deploy script.
+#
+# ⚠️ Before this works, you must replace the three placeholders below
+# (CPANEL_USERNAME, nodeapp, 20) with your actual values — see
+# docs/DEPLOY_NAMECHEAP.md for exactly how to find them. Until then, this
+# file is a template, not a working script.
+#
+# What it does when you click "Deploy HEAD Commit" in cPanel's Git Version
+# Control page: copies the repo's files into your live app folder, installs
+# dependencies and builds the app using the Node.js version's own npm (the
+# one "Setup Node.js App" created for you), then asks Passenger to restart
+# the app.
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/CPANEL_USERNAME/nodeapp/
+    - /bin/cp -R * $DEPLOYPATH
+    - source /home/CPANEL_USERNAME/nodevenv/nodeapp/20/bin/activate && cd $DEPLOYPATH && npm install && npm run build
+    - mkdir -p $DEPLOYPATH/tmp && touch $DEPLOYPATH/tmp/restart.txt

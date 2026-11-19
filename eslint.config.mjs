@@ -5,7 +5,10 @@ const eslintConfig = [
   ...nextCoreWebVitals,
   ...nextTypescript,
   {
-    ignores: ["data/**", ".next/**"],
+    // server.js intentionally uses require() — it's a plain CommonJS
+    // Node.js entry point for hosts like cPanel's Node.js Selector,
+    // documented in next's own custom-server guide, not app source.
+    ignores: ["data/**", ".next/**", "server.js"],
   },
   {
     rules: {

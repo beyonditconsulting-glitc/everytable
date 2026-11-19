@@ -69,9 +69,22 @@ a simple JSON file — no database setup needed. This is fine for a
 single-instance internal tool; swap in a real database if you need
 multi-instance deployment.
 
+## Deploying
+
+For shared hosting (e.g. Namecheap cPanel plans), see
+[`docs/DEPLOY_NAMECHEAP.md`](docs/DEPLOY_NAMECHEAP.md). The app has no
+native/system dependencies (PDF generation is pure JS), so it runs on
+ordinary Node.js hosting — no headless browser or root access needed.
+
+For any other Node.js host (VPS, Docker, etc.), it's a standard Next.js
+app: `npm run build` then `npm start`, or `npm run start:passenger` /
+`node server.js` for hosts (like cPanel's Node.js Selector) that expect a
+single startup file listening on `process.env.PORT`.
+
 ## Tech stack
 
 - Next.js (App Router) + TypeScript + Tailwind CSS
-- Playwright (headless Chromium) renders the flyer HTML to PDF
+- `pdfkit` renders the flyer PDF directly (no headless browser needed —
+  works on ordinary shared hosting)
 - `qrcode` for the flyer's redemption QR code
 - Zod for API input validation

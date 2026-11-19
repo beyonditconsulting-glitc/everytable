@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import { getStore } from "@/lib/stores";
 import { getOrCreatePromoCode } from "@/lib/promoCode";
-import { buildFlyerHtml } from "@/lib/flyerTemplate";
-import { buildRedeemQrDataUrl } from "@/lib/qr";
-import { renderHtmlToPdf } from "@/lib/pdf";
+import { buildFlyerPdf } from "@/lib/flyerPdf";
+import { buildRedeemQrBuffer } from "@/lib/qr";
 import { actionSchema } from "@/lib/validation";
 
 export async function POST(req: Request) {
@@ -23,9 +22,8 @@ export async function POST(req: Request) {
   }
 
   const promo = await getOrCreatePromoCode(store, lead, "flyer");
-  const qrDataUrl = await buildRedeemQrDataUrl(store, promo);
-  const html = buildFlyerHtml(store, lead, promo, qrDataUrl);
-  const pdf = await renderHtmlToPdf(html);
+  const qrBuffer = await buildRedeemQrBuffer(store, promo);
+  const pdf = await buildFlyerPdf(store, lead, promo, qrBuffer);
 
   const filename = `${lead.name.replace(/[^a-z0-9]+/gi, "-")}-flyer.pdf`;
 
